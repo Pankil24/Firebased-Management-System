@@ -16,6 +16,8 @@ import {
   YAxis
 } from 'recharts'
 import axiosHandler from '../lib/axiosInterceptor'
+import * as XLSX from 'xlsx'
+import { saveAs } from 'file-saver'
 
 const FireNOCDashboard = () => {
   const mockData = {
@@ -84,18 +86,61 @@ const FireNOCDashboard = () => {
     fetchDashboardData()
   }, [])
 
+  const downloadExcel = () => {
+    // Create worksheets for each section
+    const totalData = [
+      { totalUsers: data.totalUsers, totalNOCRequests: data.totalNOCRequests }
+    ]
+    const monthlySubmissionsSheet = XLSX.utils.json_to_sheet(
+      data.monthlySubmissions
+    )
+    const pendingTrendSheet = XLSX.utils.json_to_sheet(data.pendingTrend)
+    const approvalBreakdownSheet = XLSX.utils.json_to_sheet(
+      data.approvalBreakdown
+    )
+    const summarySheet = XLSX.utils.json_to_sheet(totalData)
+
+    // Create a workbook and append sheets
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, summarySheet, 'Summary')
+    XLSX.utils.book_append_sheet(
+      wb,
+      monthlySubmissionsSheet,
+      'Monthly Submissions'
+    )
+    XLSX.utils.book_append_sheet(wb, pendingTrendSheet, 'Pending Trend')
+    XLSX.utils.book_append_sheet(
+      wb,
+      approvalBreakdownSheet,
+      'Approval Breakdown'
+    )
+
+    // Write the workbook and trigger download
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
+    const excelFile = new Blob([excelBuffer], {
+      type: 'application/octet-stream'
+    })
+
+    saveAs(excelFile, 'NOC_Report.xlsx')
+  }
+
   return (
     <div className='flex min-h-screen bg-gradient-to-br from-gray-900 to-gray-800'>
       {/* Sidebar */}
 
       {/* Main Content */}
       <div className='flex-1 p-8'>
-        {/* <div className='flex justify-between items-center mb-6'>
+        <div className='flex justify-between items-center mb-6'>
           <h1 className='text-white text-2xl font-bold'>Dashboard</h1>
-          <button className='bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700'>
+          <button
+            className='bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700'
+            onClick={() => {
+              downloadExcel()
+            }}
+          >
             Download Reports
           </button>
-        </div> */}
+        </div>
 
         <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mb-8'>
           <StatCard

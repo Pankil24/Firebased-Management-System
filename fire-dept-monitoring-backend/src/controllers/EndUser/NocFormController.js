@@ -55,8 +55,10 @@ const submitNocForm = async (req, res) => {
 }
 
 const getAllNocForms = async (req, res) => {
-  try {
-    const nocForms = await NocForm.findAll() // Fetch all NOC applications
+  try {    
+    const nocForms = await NocForm.findAll({
+      order: [['id', 'DESC']] // Fetch all NOC applications ordered by createdAt in descending order
+    });
     res.status(200).json({ data: nocForms })
   } catch (error) {
     res.status(500).json({ error: error.message })

@@ -3,6 +3,7 @@ import axiosHandler from '../lib/axiosInterceptor'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { useLocation, useNavigate } from 'react-router-dom'
+import FileSaver from 'file-saver'
 
 const PendingRequests = () => {
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -95,7 +96,20 @@ const PendingRequests = () => {
     }
   }
 
-  console.log('Data =>', data)
+  const downloadFile = (filePath, name) => {
+    console.log("Here i am ")
+    fetch(filePath, {
+      method: 'GET'
+    })
+      .then((response) => {
+        const blob = response.blob()
+        return blob
+      })
+      .then((blob) => {
+        const customFileName = `${name}`
+        FileSaver.saveAs(blob, customFileName)
+      })
+  }
 
   return (
     <div className='p-6 bg-gray-900 text-gray-200 h-full min-h-screen shadow-lg'>
@@ -138,7 +152,7 @@ const PendingRequests = () => {
                 key={request.id}
                 className='hover:bg-gray-700 transition-colors duration-150'
               >
-                <td className='px-6 py-4 whitespace-nowrap'>{request.id}</td>
+                <td className='px-6 py-4 whitespace-nowrap'>ID_{request.id}</td>
                 <td className='px-6 py-4 whitespace-nowrap'>
                   {request.ownerName}
                 </td>
@@ -286,13 +300,15 @@ const PendingRequests = () => {
                           >
                             View
                           </a>
-                          <a
-                            href={`${selectedRequest[key]}`}
-                            download
+                          <span
+                            // href={`${selectedRequest[key]}`}
+                            onClick={() => {
+                              downloadFile(selectedRequest[key], key)
+                            }}
                             className='text-green-400 hover:underline'
                           >
                             Download
-                          </a>
+                          </span>
                         </div>
                       </div>
                     ))}

@@ -1,12 +1,19 @@
-# React + Vite
+Fire NOC Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Overview
+   The Fire NOC Management System is a web-based application designed to manage the approval and tracking of Fire NOC (No Objection Certificate) requests. The system includes two panels:
+    • User Panel: Allows users to submit NOC applications along with necessary documents.
+    • Admin Panel: Enables administrators to review, approve, or reject NOC applications.
 
-Currently, two official plugins are available:
+Technologies Used
+    • Frontend: React.js, Tailwind CSS
+    • Backend: Node.js, Express.js
+    • Database: MongoDB
+    • Blockchain: Ethereum (for document security)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Features
+    • User registration and document upload
+    • Admin dashboard for request management
+    • Blockchain-based document security
+    • Notification system
